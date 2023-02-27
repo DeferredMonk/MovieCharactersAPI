@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieCharactersAPI.Models
 {
@@ -22,9 +23,9 @@ namespace MovieCharactersAPI.Models
         [Required]
         [Url]
         public string Trailer { get; set; }
-        [Required]
         public ICollection<Character> Characters { get; set; }
-        [Required]
-        public Franchise FranchiseId { get; set; }
+        [ForeignKey("Franchise")]
+        public Franchise Franchise { get; set; }
+       
     }
 }
