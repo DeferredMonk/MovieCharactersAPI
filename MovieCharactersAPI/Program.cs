@@ -15,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // Will trigger MovieService when ever kohtaa IMovieServicen
 builder.Services.AddTransient<IMovieService, MovieService>();
+builder.Services.AddTransient<IFranchiseService, FranchiseService>();
 
 var app = builder.Build();
 
