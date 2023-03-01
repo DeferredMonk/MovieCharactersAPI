@@ -57,6 +57,7 @@ namespace MovieCharactersAPI.Services
                 throw new MovieNotFoundException(movie.Id);
             }
 
+            _context.Entry(movie).State= EntityState.Modified;
             await _context.SaveChangesAsync();
             return movie;
         }
