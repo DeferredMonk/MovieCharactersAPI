@@ -9,6 +9,6 @@ namespace MovieCharactersAPI.Models
         public string Name { get; set; }
         [MaxLength(150)]
         public string Description { get; set; }
-        public ICollection<Movie> Movies { get; set; }
+        public ICollection<Movie>? Movies { get; set; }
     }
 }
