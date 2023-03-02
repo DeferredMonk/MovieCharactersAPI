@@ -19,9 +19,15 @@ namespace MovieCharactersAPI.Services
             return Franchise;
         }
 
-        public Task DeleteFranchise(int id)
+        public async Task DeleteFranchise(int id)
         {
-            throw new NotImplementedException();
+            var franchise = await _context.Franchises.Include(x => x.Movies).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (franchise == null) { throw new FranchiseNotFoundException(id); }
+            _ = franchise.Movies.Select(x => x.FranchiseId = null);
+
+            _context.Franchises.Remove(franchise);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Franchise>> GetAllFranchises()

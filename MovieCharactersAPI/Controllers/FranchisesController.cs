@@ -64,21 +64,21 @@ namespace MovieCharactersAPI.Controllers
             return CreatedAtAction("GetFranchise", new { id = franchise.Id }, await FranchiseService.AddFranchise(franchise));
         }
 
-        //// DELETE: api/Franchises/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteFranchise(int id)
-        //{
-        //    var franchise = await _context.Franchises.FindAsync(id);
-        //    if (franchise == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // DELETE: api/Franchises/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteFranchise(int id)
+        {
+            try
+            {
+                await FranchiseService.DeleteFranchise(id);
 
-        //    _context.Franchises.Remove(franchise);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
+            }
+            catch (FranchiseNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails { Detail = ex.Message });
+            }
+            return Ok();
+        }
 
     }
 }
