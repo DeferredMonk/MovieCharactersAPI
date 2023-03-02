@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using MovieCharactersAPI.Exceptions;
 using MovieCharactersAPI.Models;
 using MovieCharactersAPI.Services;
@@ -69,14 +63,41 @@ namespace MovieCharactersAPI.Controllers
                 });
             }
 
-            return NoContent();
+            return Ok();
+        }
+
+        // PUT: api/Movies/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}/characters")]
+        public async Task<IActionResult> AddCharactersToMovie(int id, List<int> characters)
+        {
+            try
+            {
+                await _movieService.AddCharactersToMovie(id, characters);
+            }
+            catch (MovieNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Detail = ex.Message,
+                });
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Detail = ex.Message,
+                });
+            }
+
+            return Ok();
         }
 
         // POST: api/Movies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
-        {            
+        {
             return CreatedAtAction("GetMovie", new { id = movie.Id }, await _movieService.AddMovie(movie));
         }
 
