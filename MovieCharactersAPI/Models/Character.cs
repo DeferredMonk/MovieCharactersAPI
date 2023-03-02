@@ -13,6 +13,6 @@ namespace MovieCharactersAPI.Models
         public string Gender { get; set; }
         [Url]
         public string Picture { get; set; }
-        public ICollection<Movie> Movies { get; set; }
+        public ICollection<Movie>? Movies { get; set; }
     }
 }

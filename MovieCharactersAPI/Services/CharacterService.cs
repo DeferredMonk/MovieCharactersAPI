@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MovieCharactersAPI.Exceptions;
 using MovieCharactersAPI.Models;
 
 namespace MovieCharactersAPI.Services
@@ -6,14 +7,30 @@ namespace MovieCharactersAPI.Services
     public class CharacterService : ICharacterService
     {
         private readonly MoviesDbContext _context;
+
+        public CharacterService(MoviesDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task<Character> AddCharacter(Character character)
         {
-            throw new NotImplementedException();
+            _context.Characters.Add(character);
+            await _context.SaveChangesAsync();
+
+            return character;
         }
 
         public async Task DeleteCharacter(int id)
         {
-            throw new NotImplementedException();
+            var character = await _context.Characters.FindAsync(id);
+            if (character == null)
+            {
+                throw new CharacterNotFoundException(id);
+            }
+
+            _context.Characters.Remove(character);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Character>> GetAllCharacters()
@@ -27,7 +44,7 @@ namespace MovieCharactersAPI.Services
 
             if (character == null)
             {
-                throw new Chara
+                throw new CharacterNotFoundException(id);
             }
 
             return character;
@@ -35,7 +52,15 @@ namespace MovieCharactersAPI.Services
 
         public async Task<Character> UpdateCharacter(Character character)
         {
-            throw new NotImplementedException();
+            var searchedCharacter = await _context.Characters.AnyAsync(x => x.Id == character.Id);
+            if (!searchedCharacter)
+            {
+                throw new MovieNotFoundException(character.Id);
+            }
+
+            _context.Entry(character).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return character;
         }
     }
 }
