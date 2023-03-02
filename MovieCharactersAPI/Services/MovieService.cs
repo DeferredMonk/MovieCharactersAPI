@@ -13,6 +13,29 @@ namespace MovieCharactersAPI.Services
             _context = context;
         }
 
+        public async Task<Movie> AddCharactersToMovie(int id, List<int> CharsToAdd)
+        {
+            Movie MovieToUpdateChars = await _context.Movies
+                .Include(c => c.Characters)
+                .Where(c => c.Id == id)
+                .FirstAsync();
+
+            List<Character> Chars = new List<Character>();
+            foreach (int charId in CharsToAdd)
+            {
+                Character character = await _context.Characters.FindAsync(charId);
+                if (character == null)
+                {
+                    throw new CharacterNotFoundException(charId);
+                }
+                Chars.Add(character);
+            }
+            MovieToUpdateChars.Characters = Chars;
+            await _context.SaveChangesAsync();
+
+            return MovieToUpdateChars;
+        }
+
         public async Task<Movie> AddMovie(Movie movie)
         {
             _context.Movies.Add(movie);
@@ -57,7 +80,7 @@ namespace MovieCharactersAPI.Services
                 throw new MovieNotFoundException(movie.Id);
             }
 
-            _context.Entry(movie).State= EntityState.Modified;
+            _context.Entry(movie).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return movie;
         }
