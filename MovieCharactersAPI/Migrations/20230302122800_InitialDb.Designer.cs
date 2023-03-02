@@ -12,7 +12,7 @@ using MovieCharactersAPI.Models;
 namespace MovieCharactersAPI.Migrations
 {
     [DbContext(typeof(MoviesDbContext))]
-    [Migration("20230228115054_InitialDb")]
+    [Migration("20230302122800_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />

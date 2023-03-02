@@ -13,8 +13,10 @@ builder.Services.AddDbContext<MoviesDbContext>(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 // Will trigger MovieService when ever kohtaa IMovieServicen
 builder.Services.AddTransient<IMovieService, MovieService>();
+builder.Services.AddTransient<IFranchiseService, FranchiseService>();
 builder.Services.AddTransient<ICharacterService, CharacterService>();
 
 var app = builder.Build();
