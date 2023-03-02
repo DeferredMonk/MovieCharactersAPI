@@ -11,33 +11,33 @@ using MovieCharactersAPI.Services;
 
 namespace MovieCharactersAPI.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class MoviesController : ControllerBase
+    public class CharactersController : ControllerBase
     {
-        private readonly IMovieService _movieService;
+        private readonly ICharacterService _characterService;
 
-        public MoviesController(IMovieService movieService)
+        public CharactersController(ICharacterService characterService)
         {
-            _movieService = movieService;
+            _characterService = characterService;
         }
 
-        // GET: api/Movies
+        // GET: api/Characters
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
+        public async Task<ActionResult<IEnumerable<Character>>> GetCharacters()
         {
-            return Ok(await _movieService.GetAllMovies());
+            return Ok(await _characterService.GetAllCharacters());
         }
 
-        // GET: api/Movies/5
+        //GET: api/Characters/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        public async Task<ActionResult<Character>> GetCharacter(int id)
         {
             try
             {
-                return await _movieService.GetMovieById(id);
+                return await _characterService.GetCharacterById(id);
             }
-            catch (MovieNotFoundException ex)
+            catch (CharacterNotFoundException ex)
             {
 
                 return NotFound(new ProblemDetails
@@ -47,21 +47,21 @@ namespace MovieCharactersAPI.Controllers
             }
         }
 
-        // PUT: api/Movies/5
+        // PUT: api/Characters/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovie(int id, Movie movie)
+        public async Task<IActionResult> PutCharacter(int id, Character character)
         {
-            if (id != movie.Id)
+            if (id != character.Id)
             {
                 return BadRequest();
             }
 
             try
             {
-                await _movieService.UpdateMovie(movie);
+                await _characterService.UpdateCharacter(character);
             }
-            catch (MovieNotFoundException ex)
+            catch (CharacterNotFoundException ex)
             {
                 return NotFound(new ProblemDetails
                 {
@@ -72,25 +72,24 @@ namespace MovieCharactersAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Movies
+        // POST: api/Characters
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
-        {            
-            return CreatedAtAction("GetMovie", new { id = movie.Id }, await _movieService.AddMovie(movie));
+        public async Task<ActionResult<Character>> PostCharacter(Character character)
+        {
+            return CreatedAtAction("GetCharacter", new { id = character.Id }, await _characterService.AddCharacter(character));
         }
 
-        // DELETE: api/Movies/5
+        // DELETE: api/Characters/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMovie(int id)
+        public async Task<IActionResult> DeleteCharacter(int id)
         {
             try
             {
-                await _movieService.DeleteMovie(id);
+                await _characterService.DeleteCharacter(id);
             }
-            catch (MovieNotFoundException ex)
+            catch (CharacterNotFoundException ex)
             {
-
                 return NotFound(new ProblemDetails
                 {
                     Detail = ex.Message,
