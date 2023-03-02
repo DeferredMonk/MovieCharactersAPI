@@ -56,6 +56,22 @@ namespace MovieCharactersAPI.Controllers
             }
         }
 
+        // PUT: api/Franchises/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}/movies")]
+        public async Task<IActionResult> AddMoviesToFranchise(int id, List<int> moviesToAdd)
+        {
+            try
+            {
+                await FranchiseService.AddMoviesToFranchise(id, moviesToAdd);
+                return Ok();
+            }
+            catch (FranchiseNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails { Detail = ex.Message });
+            }
+        }
+
         // POST: api/Franchises
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
