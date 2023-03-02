@@ -99,10 +99,5 @@ namespace MovieCharactersAPI.Controllers
 
             return NoContent();
         }
-
-        //private bool MovieExists(int id)
-        //{
-        //    return _context.Movies.Any(e => e.Id == id);
-        //}
     }
 }
