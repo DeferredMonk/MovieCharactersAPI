@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using MovieCharactersAPI.Models;
 using MovieCharactersAPI.Services;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +14,24 @@ builder.Services.AddDbContext<MoviesDbContext>(options =>
 );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
-// Will trigger MovieService when ever kohtaa IMovieServicen
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Version = "v1",
+        Title = "MovieCharactersApi",
+        Description = "MOVIECHARACTERSAPI",
+        Contact = new OpenApiContact
+        {
+            Name = "MaKi",
+            Url = new Uri("https://github.com/wikris")
+        }
+    });
+    options.IncludeXmlComments(xmlPath);
+});
 builder.Services.AddTransient<IMovieService, MovieService>();
 builder.Services.AddTransient<IFranchiseService, FranchiseService>();
 builder.Services.AddTransient<ICharacterService, CharacterService>();

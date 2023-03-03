@@ -69,6 +69,40 @@ namespace MovieCharactersAPI.Services
             return searchedFranchiseMovies;
         }
 
+        public async Task<ICollection<Character>> GetAllCharactersInAFranchises(int id)
+        {
+            ICollection<Character> chars = new List<Character>();
+
+            //var searchedFranchiseMovies = await _context.Movies
+            //    .Include(x => x.Characters)
+            //    .Where(x => x.FranchiseId == id)
+
+            //    .Select((x) =>
+            //    {
+            //        chars.Add((Character)x.Characters);
+            //        return x.Characters;
+            //    }).ToListAsync();
+            var searchedFranchiseMovies = await _context.Movies
+                .Where(x => x.FranchiseId == id).ToListAsync();
+
+            
+                
+            //var selectedMovieChars = await _context.Characters
+
+            //    .Where(x => x.Id == id)
+            //    .Select(x => x.Characters)
+            //    .SingleAsync();
+
+
+
+            if (searchedFranchiseMovies == null)
+            {
+                throw new FranchiseNotFoundException(id);
+            }
+
+            return chars;
+        }
+
         public async Task<Franchise> GetFranchiseById(int id)
         {
             var franchise = await _context.Franchises.FindAsync(id);

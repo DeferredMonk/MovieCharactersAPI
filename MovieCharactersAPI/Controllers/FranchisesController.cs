@@ -2,10 +2,14 @@
 using MovieCharactersAPI.Exceptions;
 using MovieCharactersAPI.Models;
 using MovieCharactersAPI.Services;
+using System.Net.Mime;
 
 namespace MovieCharactersAPI.Controllers
 {
     [Route("api/[controller]")]
+    [ApiConventionType(typeof(DefaultApiConventions))]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
     [ApiController]
     public class FranchisesController : ControllerBase
     {
@@ -38,12 +42,25 @@ namespace MovieCharactersAPI.Controllers
         }
 
         // Get All Movies in Franchise
-        [HttpGet("{id}/Franchise")]
+        [HttpGet("{id}/Movies")]
         public async Task<ActionResult<ICollection<Movie>>> GetAllMoviesOfFranchise(int id)
         {
             try
             {
                 return Ok(await FranchiseService.GetAllMoviesOfFranchises(id));
+            }
+            catch (FranchiseNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails { Detail = ex.Message });
+            }
+        }
+        // Get All Movies in Franchise
+        [HttpGet("{id}/Characters")]
+        public async Task<ActionResult<ICollection<Character>>> GetAllCharactersInAFranchise(int id)
+        {
+            try
+            {
+                return Ok(await FranchiseService.GetAllCharactersInAFranchises(id));
             }
             catch (FranchiseNotFoundException ex)
             {
