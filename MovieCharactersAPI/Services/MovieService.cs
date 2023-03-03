@@ -56,6 +56,17 @@ namespace MovieCharactersAPI.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<ICollection<Character>> GetAllCharactersInAMovies(int id)
+        {
+            var selectedMovieChars = await _context.Movies
+                .Include(x => x.Characters)
+                .Where(x => x.Id == id)
+                .Select(x => x.Characters)
+                .SingleAsync();
+
+            return selectedMovieChars;
+        }
+
         public async Task<IEnumerable<Movie>> GetAllMovies()
         {
             return await _context.Movies.ToListAsync();
