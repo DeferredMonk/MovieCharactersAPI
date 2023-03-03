@@ -32,11 +32,11 @@ namespace MovieCharactersAPI.Controllers
         }
         // Get All Characters in Movie
         [HttpGet("{id}/characters")]
-        public async Task<ActionResult<ICollection<Character>>> GetAllCharactersInAMovie(int id)
+        public async Task<ActionResult<ICollection<CharacterDto>>> GetAllCharactersInAMovie(int id)
         {
             try
             {
-                return Ok(_mapper.Map<ICollection<Character>>(await _movieService.GetAllCharactersInAMovies(id)));
+                return Ok(_mapper.Map<ICollection<CharacterDto>>(await _movieService.GetAllCharactersInAMovies(id)));
             }
             catch (CharacterNotFoundException ex)
             {
@@ -54,7 +54,7 @@ namespace MovieCharactersAPI.Controllers
             }
             catch (MovieNotFoundException ex)
             {
-                return NotFound(new ProblemDetails { Detail = ex.Message});
+                return NotFound(new ProblemDetails { Detail = ex.Message });
             }
         }
 
@@ -116,7 +116,7 @@ namespace MovieCharactersAPI.Controllers
         // POST: api/Movies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
+        public async Task<ActionResult<MovieDto>> PostMovie(Movie movie)
         {
             return CreatedAtAction("GetMovie", new { id = movie.Id }, _mapper.Map<MovieDto>(await _movieService.AddMovie(movie)));
         }

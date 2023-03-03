@@ -4,7 +4,7 @@ using MovieCharactersAPI.Models.Dtos;
 
 namespace MovieCharactersAPI.Profiles
 {
-    public class MovieProfile: Profile
+    public class MovieProfile : Profile
     {
         public MovieProfile()
         {

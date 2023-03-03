@@ -17,10 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-
 
 builder.Services.AddSwaggerGen(options =>
 {
