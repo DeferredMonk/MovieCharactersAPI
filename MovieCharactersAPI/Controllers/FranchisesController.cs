@@ -64,7 +64,7 @@ namespace MovieCharactersAPI.Controllers
         {
             try
             {
-                return Ok(await FranchiseService.GetAllCharactersInAFranchises(id));
+                return Ok(_mapper.Map<ICollection<Character>>(await FranchiseService.GetAllCharactersInAFranchises(id)));
             }
             catch (FranchiseNotFoundException ex)
             {
@@ -98,7 +98,7 @@ namespace MovieCharactersAPI.Controllers
         {
             try
             {
-                return Ok(_mapper.Map <FranchiseDto>(await FranchiseService.AddMoviesToFranchise(id, moviesToAdd)));
+                return Ok(_mapper.Map<FranchiseDto>(await FranchiseService.AddMoviesToFranchise(id, moviesToAdd)));
             }
             catch (FranchiseNotFoundException ex)
             {
