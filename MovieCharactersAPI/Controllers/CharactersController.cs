@@ -1,13 +1,17 @@
+
+﻿using AutoMapper;
+
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MovieCharactersAPI.Exceptions;
 using MovieCharactersAPI.Models;
+using MovieCharactersAPI.Models.Dtos;
 using MovieCharactersAPI.Services;
 
 namespace MovieCharactersAPI.Controllers
@@ -20,34 +24,31 @@ namespace MovieCharactersAPI.Controllers
     public class CharactersController : ControllerBase
     {
         private readonly ICharacterService _characterService;
-
-        public CharactersController(ICharacterService characterService)
+        private readonly IMapper _mapper;
+        public CharactersController(ICharacterService characterService, IMapper mapper)
         {
             _characterService = characterService;
+            _mapper = mapper;
         }
 
         // GET: api/Characters
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Character>>> GetCharacters()
+        public async Task<ActionResult<IEnumerable<CharacterDto>>> GetCharacters()
         {
-            return Ok(await _characterService.GetAllCharacters());
+            return Ok(_mapper.Map<IEnumerable<CharacterDto>>(await _characterService.GetAllCharacters()));
         }
 
         //GET: api/Characters/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Character>> GetCharacter(int id)
+        public async Task<ActionResult<CharacterDto>> GetCharacter(int id)
         {
             try
             {
-                return await _characterService.GetCharacterById(id);
+                return Ok(_mapper.Map<CharacterDto>(await _characterService.GetCharacterById(id)));
             }
             catch (CharacterNotFoundException ex)
             {
-
-                return NotFound(new ProblemDetails
-                {
-                    Detail = ex.Message,
-                });
+                return NotFound(new ProblemDetails { Detail = ex.Message });
             }
         }
 
@@ -60,20 +61,14 @@ namespace MovieCharactersAPI.Controllers
             {
                 return BadRequest();
             }
-
             try
             {
-                await _characterService.UpdateCharacter(character);
+                return Ok(_mapper.Map<CharacterDto>(await _characterService.UpdateCharacter(character)));
             }
             catch (CharacterNotFoundException ex)
             {
-                return NotFound(new ProblemDetails
-                {
-                    Detail = ex.Message,
-                });
+                return NotFound(new ProblemDetails { Detail = ex.Message });
             }
-
-            return NoContent();
         }
 
         // POST: api/Characters
@@ -81,7 +76,7 @@ namespace MovieCharactersAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Character>> PostCharacter(Character character)
         {
-            return CreatedAtAction("GetCharacter", new { id = character.Id }, await _characterService.AddCharacter(character));
+            return CreatedAtAction("GetCharacter", new { id = character.Id }, _mapper.Map<CharacterDto>(await _characterService.AddCharacter(character)));
         }
 
         // DELETE: api/Characters/5
@@ -90,17 +85,12 @@ namespace MovieCharactersAPI.Controllers
         {
             try
             {
-                await _characterService.DeleteCharacter(id);
+                return Ok(_mapper.Map<CharacterDto>(await _characterService.DeleteCharacter(id)));
             }
             catch (CharacterNotFoundException ex)
             {
-                return NotFound(new ProblemDetails
-                {
-                    Detail = ex.Message,
-                });
+                return NotFound(new ProblemDetails { Detail = ex.Message });
             }
-
-            return NoContent();
         }
     }
 }

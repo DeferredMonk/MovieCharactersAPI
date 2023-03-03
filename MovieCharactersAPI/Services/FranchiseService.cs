@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieCharactersAPI.Exceptions;
 using MovieCharactersAPI.Models;
+using MovieCharactersAPI.Models.Dtos;
 
 namespace MovieCharactersAPI.Services
 {
@@ -19,7 +20,7 @@ namespace MovieCharactersAPI.Services
             return Franchise;
         }
 
-        public async Task AddMoviesToFranchise(int id, List<int> moviesToAdd)
+        public async Task<Franchise> AddMoviesToFranchise(int id, List<int> moviesToAdd)
         {
             Franchise FranchiseToUpdateMovies = await _context.Franchises
                 .Include(m => m.Movies)
@@ -35,11 +36,11 @@ namespace MovieCharactersAPI.Services
                 }
                 movie.FranchiseId = id;
             }
-            //FranchiseToUpdateMovies.Movies = Movies;
             await _context.SaveChangesAsync();
+            return FranchiseToUpdateMovies;
         }
 
-        public async Task DeleteFranchise(int id)
+        public async Task<Franchise> DeleteFranchise(int id)
         {
             var franchise = await _context.Franchises.Include(x => x.Movies).FirstOrDefaultAsync(x => x.Id == id);
 
@@ -48,6 +49,8 @@ namespace MovieCharactersAPI.Services
 
             _context.Franchises.Remove(franchise);
             await _context.SaveChangesAsync();
+
+            return franchise;
         }
 
         public async Task<IEnumerable<Franchise>> GetAllFranchises()
@@ -59,7 +62,6 @@ namespace MovieCharactersAPI.Services
         {
             var searchedFranchiseMovies = await _context.Movies
                 .Where(x => x.FranchiseId == id).ToListAsync();
-
 
             if (searchedFranchiseMovies == null)
             {
@@ -103,13 +105,11 @@ namespace MovieCharactersAPI.Services
             {
                 throw new FranchiseNotFoundException(id);
             }
-
             return franchise;
         }
 
         public async Task<Franchise> UpdateFranchise(Franchise Franchise)
         {
-
             var searchedFranchise = await _context.Franchises.AnyAsync(x => x.Id == Franchise.Id);
             if (!searchedFranchise) throw new FranchiseNotFoundException(Franchise.Id);
 

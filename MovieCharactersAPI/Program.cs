@@ -17,6 +17,11 @@ builder.Services.AddEndpointsApiExplorer();
 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -32,6 +37,7 @@ builder.Services.AddSwaggerGen(options =>
     });
     options.IncludeXmlComments(xmlPath);
 });
+
 builder.Services.AddTransient<IMovieService, MovieService>();
 builder.Services.AddTransient<IFranchiseService, FranchiseService>();
 builder.Services.AddTransient<ICharacterService, CharacterService>();
