@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieCharactersAPI.Exceptions;
 using MovieCharactersAPI.Models;
+using NuGet.Packaging;
 
 namespace MovieCharactersAPI.Services
 {
@@ -53,6 +54,29 @@ namespace MovieCharactersAPI.Services
         public async Task<IEnumerable<Franchise>> GetAllFranchises()
         {
             return await _context.Franchises.ToListAsync();
+        }
+
+        public async Task<ICollection<Movie>> GetAllMoviesOfFranchises(int id)
+        {
+            Franchise searchedFranchise = await _context.Franchises
+                .Where(m => m.Id == id)
+                .FirstAsync();
+
+            if (searchedFranchise == null)
+            {
+                throw new FranchiseNotFoundException(id);
+            }
+
+            foreach (var movie in searchedFranchise.Movies)
+            {
+                Movie movieToGet = await _context.Movies.FindAsync(movie.Id);
+                if (movie == null)
+                {
+                    throw new MovieNotFoundException(movie.Id);
+                }
+            }
+
+            return movies;
         }
 
         public async Task<Franchise> GetFranchiseById(int id)

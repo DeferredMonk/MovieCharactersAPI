@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MovieCharactersAPI.Exceptions;
 using MovieCharactersAPI.Models;
 using MovieCharactersAPI.Services;
@@ -30,6 +31,20 @@ namespace MovieCharactersAPI.Controllers
             try
             {
                 return await FranchiseService.GetFranchiseById(id);
+            }
+            catch (FranchiseNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails { Detail = ex.Message });
+            }
+        }
+
+        // Get All Movies in Franchise
+        [HttpGet("{id}/Franchise")]
+        public async Task<ActionResult<ICollection<Movie>>> GetAllMoviesOfFranchise(int id)
+        {
+            try
+            {
+                return Ok(await FranchiseService.GetAllMoviesOfFranchises(id));
             }
             catch (FranchiseNotFoundException ex)
             {

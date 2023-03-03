@@ -10,5 +10,6 @@ namespace MovieCharactersAPI.Services
         Task DeleteFranchise(int id);
         Task<Franchise> UpdateFranchise(Franchise Franchise);
         Task AddMoviesToFranchise(int id, List<int> moviesToAdd);
+        Task<ICollection<Movie>> GetAllMoviesOfFranchises(int id);
     }
 }
