@@ -12,7 +12,6 @@ namespace MovieCharactersAPI.Services
         {
             _context = context;
         }
-
         public async Task<Character> AddCharacter(Character character)
         {
             _context.Characters.Add(character);
@@ -20,7 +19,6 @@ namespace MovieCharactersAPI.Services
 
             return character;
         }
-
         public async Task<Character> DeleteCharacter(int id)
         {
             var character = await _context.Characters.FindAsync(id);
@@ -28,18 +26,15 @@ namespace MovieCharactersAPI.Services
             {
                 throw new CharacterNotFoundException(id);
             }
-
             _context.Characters.Remove(character);
             await _context.SaveChangesAsync();
 
             return character;
         }
-
         public async Task<IEnumerable<Character>> GetAllCharacters()
         {
             return await _context.Characters.ToListAsync();
         }
-
         public async Task<Character> GetCharacterById(int id)
         {
             var character = await _context.Characters.FindAsync(id);
@@ -51,7 +46,6 @@ namespace MovieCharactersAPI.Services
 
             return character;
         }
-
         public async Task<Character> UpdateCharacter(Character character)
         {
             var searchedCharacter = await _context.Characters.AnyAsync(x => x.Id == character.Id);

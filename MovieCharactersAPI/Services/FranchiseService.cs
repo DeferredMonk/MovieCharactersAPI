@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieCharactersAPI.Exceptions;
 using MovieCharactersAPI.Models;
-using MovieCharactersAPI.Models.Dtos;
 
 namespace MovieCharactersAPI.Services
 {
@@ -19,7 +18,6 @@ namespace MovieCharactersAPI.Services
 
             return Franchise;
         }
-
         public async Task<Franchise> AddMoviesToFranchise(int id, List<int> moviesToAdd)
         {
             Franchise FranchiseToUpdateMovies = await _context.Franchises
@@ -52,12 +50,10 @@ namespace MovieCharactersAPI.Services
 
             return franchise;
         }
-
         public async Task<IEnumerable<Franchise>> GetAllFranchises()
         {
             return await _context.Franchises.ToListAsync();
         }
-
         public async Task<ICollection<Movie>> GetAllMoviesOfFranchises(int id)
         {
             var searchedFranchiseMovies = await _context.Movies
@@ -70,7 +66,6 @@ namespace MovieCharactersAPI.Services
 
             return searchedFranchiseMovies;
         }
-
         public async Task<ICollection<Character>> GetAllCharactersInAFranchises(int id)
         {
 
@@ -89,14 +84,11 @@ namespace MovieCharactersAPI.Services
                         allChars.Add(chars);
                 }
             }
-
             if (allChars.Count == 0)
                 throw new CharacterNotFoundException(id);
 
             return allChars;
         }
-
-
         public async Task<Franchise> GetFranchiseById(int id)
         {
             var franchise = await _context.Franchises.FindAsync(id);
@@ -107,7 +99,6 @@ namespace MovieCharactersAPI.Services
             }
             return franchise;
         }
-
         public async Task<Franchise> UpdateFranchise(Franchise Franchise)
         {
             var searchedFranchise = await _context.Franchises.AnyAsync(x => x.Id == Franchise.Id);
