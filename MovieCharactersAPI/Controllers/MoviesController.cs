@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using MovieCharactersAPI.Exceptions;
 using MovieCharactersAPI.Models;
+using MovieCharactersAPI.Models.Dtos;
 using MovieCharactersAPI.Services;
 
 namespace MovieCharactersAPI.Controllers
@@ -10,25 +12,27 @@ namespace MovieCharactersAPI.Controllers
     public class MoviesController : ControllerBase
     {
         private readonly IMovieService _movieService;
+        private readonly IMapper _mapper;
 
-        public MoviesController(IMovieService movieService)
+        public MoviesController(IMovieService movieService, IMapper mapper)
         {
             _movieService = movieService;
+            _mapper = mapper;
         }
 
         // GET: api/Movies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
+        public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies()
         {
-            return Ok(await _movieService.GetAllMovies());
+            return Ok(_mapper.Map<IEnumerable<MovieDto>>(await _movieService.GetAllMovies()));
         }
-        // Get All Movies in Franchise
+        // Get All Characters in Movie
         [HttpGet("{id}/characters")]
         public async Task<ActionResult<ICollection<Character>>> GetAllCharactersInAMovie(int id)
         {
             try
             {
-                return Ok(await _movieService.GetAllCharactersInAMovies(id));
+                return Ok(_mapper.Map<ICollection<Character>>(await _movieService.GetAllCharactersInAMovies(id)));
             }
             catch (CharacterNotFoundException ex)
             {
@@ -38,19 +42,15 @@ namespace MovieCharactersAPI.Controllers
 
         // GET: api/Movies/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        public async Task<ActionResult<MovieDto>> GetMovie(int id)
         {
             try
             {
-                return await _movieService.GetMovieById(id);
+                return Ok(_mapper.Map<MovieDto>(await _movieService.GetMovieById(id)));
             }
             catch (MovieNotFoundException ex)
             {
-
-                return NotFound(new ProblemDetails
-                {
-                    Detail = ex.Message,
-                });
+                return NotFound(new ProblemDetails { Detail = ex.Message});
             }
         }
 
@@ -66,17 +66,12 @@ namespace MovieCharactersAPI.Controllers
 
             try
             {
-                await _movieService.UpdateMovie(movie);
+                return Ok(_mapper.Map<MovieDto>(await _movieService.UpdateMovie(movie))); //kesken
             }
             catch (MovieNotFoundException ex)
             {
-                return NotFound(new ProblemDetails
-                {
-                    Detail = ex.Message,
-                });
+                return NotFound(new ProblemDetails { Detail = ex.Message });
             }
-
-            return Ok();
         }
 
         // PUT: api/Movies/5
@@ -84,26 +79,34 @@ namespace MovieCharactersAPI.Controllers
         [HttpPut("{id}/characters")]
         public async Task<IActionResult> AddCharactersToMovie(int id, List<int> characters)
         {
+            //try
+            //{
+            //    await _movieService.AddCharactersToMovie(id, characters);
+            //}
+            //catch (MovieNotFoundException ex)
+            //{
+            //    return NotFound(new ProblemDetails
+            //    {
+            //        Detail = ex.Message,
+            //    });
+            //}
+            //catch (CharacterNotFoundException ex)
+            //{
+            //    return NotFound(new ProblemDetails
+            //    {
+            //        Detail = ex.Message,
+            //    });
+            //}
+
+            //return Ok();
             try
             {
-                await _movieService.AddCharactersToMovie(id, characters);
+                return Ok(_mapper.Map<MovieDto>(await _movieService.AddCharactersToMovie(id, characters)));
             }
             catch (MovieNotFoundException ex)
             {
-                return NotFound(new ProblemDetails
-                {
-                    Detail = ex.Message,
-                });
+                return NotFound(new ProblemDetails { Detail = ex.Message });
             }
-            catch (CharacterNotFoundException ex)
-            {
-                return NotFound(new ProblemDetails
-                {
-                    Detail = ex.Message,
-                });
-            }
-
-            return Ok();
         }
 
         // POST: api/Movies
@@ -111,7 +114,7 @@ namespace MovieCharactersAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
         {
-            return CreatedAtAction("GetMovie", new { id = movie.Id }, await _movieService.AddMovie(movie));
+            return CreatedAtAction("GetMovie", new { id = movie.Id }, _mapper.Map<MovieDto>(await _movieService.AddMovie(movie)));
         }
 
         // DELETE: api/Movies/5
@@ -120,18 +123,12 @@ namespace MovieCharactersAPI.Controllers
         {
             try
             {
-                await _movieService.DeleteMovie(id);
+                return Ok(_mapper.Map<MovieDto>(await _movieService.DeleteMovie(id)));
             }
             catch (MovieNotFoundException ex)
             {
-
-                return NotFound(new ProblemDetails
-                {
-                    Detail = ex.Message,
-                });
+                return NotFound(new ProblemDetails { Detail = ex.Message });
             }
-
-            return NoContent();
         }
     }
 }

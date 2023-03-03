@@ -36,11 +36,7 @@ namespace MovieCharactersAPI.Controllers
             }
             catch (CharacterNotFoundException ex)
             {
-
-                return NotFound(new ProblemDetails
-                {
-                    Detail = ex.Message,
-                });
+                return NotFound(new ProblemDetails { Detail = ex.Message });
             }
         }
 
@@ -59,10 +55,7 @@ namespace MovieCharactersAPI.Controllers
             }
             catch (CharacterNotFoundException ex)
             {
-                return NotFound(new ProblemDetails
-                {
-                    Detail = ex.Message,
-                });
+                return NotFound(new ProblemDetails { Detail = ex.Message });
             }
         }
 
@@ -84,10 +77,7 @@ namespace MovieCharactersAPI.Controllers
             }
             catch (CharacterNotFoundException ex)
             {
-                return NotFound(new ProblemDetails
-                {
-                    Detail = ex.Message,
-                });
+                return NotFound(new ProblemDetails { Detail = ex.Message });
             }
         }
     }

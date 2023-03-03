@@ -44,7 +44,7 @@ namespace MovieCharactersAPI.Services
             return movie;
         }
 
-        public async Task DeleteMovie(int id)
+        public async Task<Movie> DeleteMovie(int id)
         {
             var movie = await _context.Movies.FindAsync(id);
             if (movie == null)
@@ -54,6 +54,8 @@ namespace MovieCharactersAPI.Services
 
             _context.Movies.Remove(movie);
             await _context.SaveChangesAsync();
+
+            return movie;
         }
 
         public async Task<ICollection<Character>> GetAllCharactersInAMovies(int id)
@@ -86,10 +88,7 @@ namespace MovieCharactersAPI.Services
         public async Task<Movie> UpdateMovie(Movie movie)
         {
             var searchedMovie = await _context.Movies.AnyAsync(x => x.Id == movie.Id);
-            if (!searchedMovie)
-            {
-                throw new MovieNotFoundException(movie.Id);
-            }
+            if (!searchedMovie) { throw new MovieNotFoundException(movie.Id);}
 
             _context.Entry(movie).State = EntityState.Modified;
             await _context.SaveChangesAsync();
