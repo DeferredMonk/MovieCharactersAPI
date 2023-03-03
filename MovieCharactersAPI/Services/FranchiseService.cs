@@ -26,10 +26,10 @@ namespace MovieCharactersAPI.Services
                 .Where(m => m.Id == id)
                 .FirstAsync();
 
-            foreach (var movieId in moviesToAdd) 
-            { 
+            foreach (var movieId in moviesToAdd)
+            {
                 Movie movie = await _context.Movies.FindAsync(movieId);
-                if(movie == null)
+                if (movie == null)
                 {
                     throw new MovieNotFoundException(movieId);
                 }
@@ -53,6 +53,20 @@ namespace MovieCharactersAPI.Services
         public async Task<IEnumerable<Franchise>> GetAllFranchises()
         {
             return await _context.Franchises.ToListAsync();
+        }
+
+        public async Task<ICollection<Movie>> GetAllMoviesOfFranchises(int id)
+        {
+            var searchedFranchiseMovies = await _context.Movies
+                .Where(x => x.FranchiseId == id).ToListAsync();
+
+
+            if (searchedFranchiseMovies == null)
+            {
+                throw new FranchiseNotFoundException(id);
+            }
+
+            return searchedFranchiseMovies;
         }
 
         public async Task<Franchise> GetFranchiseById(int id)

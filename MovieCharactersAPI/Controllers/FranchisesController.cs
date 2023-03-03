@@ -37,6 +37,20 @@ namespace MovieCharactersAPI.Controllers
             }
         }
 
+        // Get All Movies in Franchise
+        [HttpGet("{id}/Franchise")]
+        public async Task<ActionResult<ICollection<Movie>>> GetAllMoviesOfFranchise(int id)
+        {
+            try
+            {
+                return Ok(await FranchiseService.GetAllMoviesOfFranchises(id));
+            }
+            catch (FranchiseNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails { Detail = ex.Message });
+            }
+        }
+
         // PUT: api/Franchises/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
