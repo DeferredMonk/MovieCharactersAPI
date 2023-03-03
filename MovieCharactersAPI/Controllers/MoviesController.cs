@@ -22,6 +22,19 @@ namespace MovieCharactersAPI.Controllers
         {
             return Ok(await _movieService.GetAllMovies());
         }
+        // Get All Movies in Franchise
+        [HttpGet("{id}/characters")]
+        public async Task<ActionResult<ICollection<Character>>> GetAllCharactersInAMovie(int id)
+        {
+            try
+            {
+                return Ok(await _movieService.GetAllCharactersInAMovies(id));
+            }
+            catch (CharacterNotFoundException ex)
+            {
+                return NotFound(new ProblemDetails { Detail = ex.Message });
+            }
+        }
 
         // GET: api/Movies/5
         [HttpGet("{id}")]
