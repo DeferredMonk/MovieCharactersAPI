@@ -21,7 +21,7 @@ namespace MovieCharactersAPI.Services
             return character;
         }
 
-        public async Task DeleteCharacter(int id)
+        public async Task<Character> DeleteCharacter(int id)
         {
             var character = await _context.Characters.FindAsync(id);
             if (character == null)
@@ -31,6 +31,8 @@ namespace MovieCharactersAPI.Services
 
             _context.Characters.Remove(character);
             await _context.SaveChangesAsync();
+
+            return character;
         }
 
         public async Task<IEnumerable<Character>> GetAllCharacters()

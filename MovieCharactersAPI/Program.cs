@@ -14,6 +14,8 @@ builder.Services.AddDbContext<MoviesDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 // Will trigger MovieService when ever kohtaa IMovieServicen
 builder.Services.AddTransient<IMovieService, MovieService>();
 builder.Services.AddTransient<IFranchiseService, FranchiseService>();
