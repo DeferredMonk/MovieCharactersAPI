@@ -1,4 +1,11 @@
 
+﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mime;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MovieCharactersAPI.Exceptions;
@@ -24,14 +31,21 @@ namespace MovieCharactersAPI.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Characters
+        /// <summary>
+        /// Get all character resources from database
+        /// </summary>
+        /// <returns>List of characters</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CharacterDto>>> GetCharacters()
         {
             return Ok(_mapper.Map<IEnumerable<CharacterDto>>(await _characterService.GetAllCharacters()));
         }
 
-        //GET: api/Characters/5
+        /// <summary>
+        /// Get a specific character based on a unique identifier 
+        /// </summary>
+        /// <param name="id">A unique identifier for a character resource</param>
+        /// <returns>A character resource</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<CharacterDto>> GetCharacter(int id)
         {
@@ -45,8 +59,12 @@ namespace MovieCharactersAPI.Controllers
             }
         }
 
-        // PUT: api/Characters/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Updates a specific character based on a unique identifier 
+        /// </summary>
+        /// <param name="id">A unique identifier for a character resource</param>
+        /// <param name="character">Character entity</param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCharacter(int id, Character character)
         {
@@ -64,15 +82,22 @@ namespace MovieCharactersAPI.Controllers
             }
         }
 
-        // POST: api/Characters
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Creates a new character resource to database
+        /// </summary>
+        /// <param name="character">Character entity</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<CharacterDto>> PostCharacter(Character character)
         {
             return CreatedAtAction("GetCharacter", new { id = character.Id }, _mapper.Map<CharacterDto>(await _characterService.AddCharacter(character)));
         }
 
-        // DELETE: api/Characters/5
+        /// <summary>
+        /// Deletes a character resource with unique identifier from database
+        /// </summary>
+        /// <param name="id">A unique identifier for a character resource</param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCharacter(int id)
         {
