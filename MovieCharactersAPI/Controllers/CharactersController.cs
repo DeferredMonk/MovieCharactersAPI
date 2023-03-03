@@ -6,11 +6,13 @@ using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MovieCharactersAPI.Exceptions;
 using MovieCharactersAPI.Models;
 using MovieCharactersAPI.Models.Dtos;
 using MovieCharactersAPI.Services;
+using System.Net.Mime;
 
 namespace MovieCharactersAPI.Controllers
 {
@@ -86,7 +88,7 @@ namespace MovieCharactersAPI.Controllers
         /// <param name="character">Character entity</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Character>> PostCharacter(Character character)
+        public async Task<ActionResult<CharacterDto>> PostCharacter(Character character)
         {
             return CreatedAtAction("GetCharacter", new { id = character.Id }, _mapper.Map<CharacterDto>(await _characterService.AddCharacter(character)));
         }

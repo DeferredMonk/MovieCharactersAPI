@@ -41,11 +41,11 @@ namespace MovieCharactersAPI.Controllers
         /// <param name="id">A unique identifier for a movie resource</param>
         /// <returns>List of characters in the movie</returns>
         [HttpGet("{id}/characters")]
-        public async Task<ActionResult<ICollection<Character>>> GetAllCharactersInAMovie(int id)
+        public async Task<ActionResult<ICollection<CharacterDto>>> GetAllCharactersInAMovie(int id)
         {
             try
             {
-                return Ok(_mapper.Map<ICollection<Character>>(await _movieService.GetAllCharactersInAMovies(id)));
+                return Ok(_mapper.Map<ICollection<CharacterDto>>(await _movieService.GetAllCharactersInAMovies(id)));
             }
             catch (CharacterNotFoundException ex)
             {
@@ -67,7 +67,7 @@ namespace MovieCharactersAPI.Controllers
             }
             catch (MovieNotFoundException ex)
             {
-                return NotFound(new ProblemDetails { Detail = ex.Message});
+                return NotFound(new ProblemDetails { Detail = ex.Message });
             }
         }
 
@@ -120,7 +120,7 @@ namespace MovieCharactersAPI.Controllers
         /// <param name="movie">Movie entity</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
+        public async Task<ActionResult<MovieDto>> PostMovie(Movie movie)
         {
             return CreatedAtAction("GetMovie", new { id = movie.Id }, _mapper.Map<MovieDto>(await _movieService.AddMovie(movie)));
         }

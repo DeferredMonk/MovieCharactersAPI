@@ -58,11 +58,11 @@ namespace MovieCharactersAPI.Controllers
         /// <param name="id">A unique identifier for a franchise resource</param>
         /// <returns>List of movies related to franchise</returns>
         [HttpGet("{id}/Movies")]
-        public async Task<ActionResult<ICollection<Movie>>> GetAllMoviesOfFranchise(int id)
+        public async Task<ActionResult<ICollection<MovieDto>>> GetAllMoviesOfFranchise(int id)
         {
             try
             {
-                return Ok(_mapper.Map<ICollection<Movie>>(await FranchiseService.GetAllMoviesOfFranchises(id)));
+                return Ok(_mapper.Map<ICollection<MovieDto>>(await FranchiseService.GetAllMoviesOfFranchises(id)));
             }
             catch (FranchiseNotFoundException ex)
             {
@@ -76,11 +76,11 @@ namespace MovieCharactersAPI.Controllers
         /// <param name="id">A unique identifier for a franchise resource</param>
         /// <returns>List of characters related franchise</returns>
         [HttpGet("{id}/Characters")]
-        public async Task<ActionResult<ICollection<Character>>> GetAllCharactersInAFranchise(int id)
+        public async Task<ActionResult<ICollection<CharacterDto>>> GetAllCharactersInAFranchise(int id)
         {
             try
             {
-                return Ok(_mapper.Map<ICollection<Character>>(await FranchiseService.GetAllCharactersInAFranchises(id)));
+                return Ok(_mapper.Map<ICollection<CharacterDto>>(await FranchiseService.GetAllCharactersInAFranchises(id)));
             }
             catch (FranchiseNotFoundException ex)
             {
@@ -136,7 +136,7 @@ namespace MovieCharactersAPI.Controllers
         /// <param name="franchise">franchise entity</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Franchise>> PostFranchise(Franchise franchise)
+        public async Task<ActionResult<FranchiseDto>> PostFranchise(Franchise franchise)
         {
             return CreatedAtAction("GetFranchise", new { id = franchise.Id }, _mapper.Map<FranchiseDto>(await FranchiseService.AddFranchise(franchise)));
         }
