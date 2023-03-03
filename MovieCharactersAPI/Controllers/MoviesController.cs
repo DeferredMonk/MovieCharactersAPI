@@ -2,10 +2,14 @@
 using MovieCharactersAPI.Exceptions;
 using MovieCharactersAPI.Models;
 using MovieCharactersAPI.Services;
+using System.Net.Mime;
 
 namespace MovieCharactersAPI.Controllers
 {
     [Route("api/v1/[controller]")]
+    [ApiConventionType(typeof(DefaultApiConventions))]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
     [ApiController]
     public class MoviesController : ControllerBase
     {
