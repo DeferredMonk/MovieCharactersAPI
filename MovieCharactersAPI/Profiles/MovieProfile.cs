@@ -4,6 +4,9 @@ using MovieCharactersAPI.Models.Dtos;
 
 namespace MovieCharactersAPI.Profiles
 {
+    /// <summary>
+    /// Profile to map MovieDto
+    /// </summary>
     public class MovieProfile : Profile
     {
         public MovieProfile()

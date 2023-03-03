@@ -4,7 +4,10 @@ using MovieCharactersAPI.Models.Dtos;
 
 namespace MovieCharactersAPI.Profiles
 {
-    public class FranchiseProfile: Profile
+    /// <summary>
+    /// Profile to map FranchiseDto
+    /// </summary>
+    public class FranchiseProfile : Profile
     {
         public FranchiseProfile()
         {
