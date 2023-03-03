@@ -71,37 +71,29 @@ namespace MovieCharactersAPI.Services
 
         public async Task<ICollection<Character>> GetAllCharactersInAFranchises(int id)
         {
-            ICollection<Character> chars = new List<Character>();
 
-            //var searchedFranchiseMovies = await _context.Movies
-            //    .Include(x => x.Characters)
-            //    .Where(x => x.FranchiseId == id)
+            List<Character> allChars = new List<Character>();
+            var selectedMovieChars = await _context.Movies
+                .Include(x => x.Characters)
+                .Where(x => x.FranchiseId == id)
+                .Select(x => x.Characters)
+                .ToListAsync();
 
-            //    .Select((x) =>
-            //    {
-            //        chars.Add((Character)x.Characters);
-            //        return x.Characters;
-            //    }).ToListAsync();
-            var searchedFranchiseMovies = await _context.Movies
-                .Where(x => x.FranchiseId == id).ToListAsync();
-
-            
-                
-            //var selectedMovieChars = await _context.Characters
-
-            //    .Where(x => x.Id == id)
-            //    .Select(x => x.Characters)
-            //    .SingleAsync();
-
-
-
-            if (searchedFranchiseMovies == null)
+            foreach (var characterC in selectedMovieChars)
             {
-                throw new FranchiseNotFoundException(id);
+                foreach (var chars in characterC)
+                {
+                    if (!allChars.Contains(chars))
+                        allChars.Add(chars);
+                }
             }
 
-            return chars;
+            if (allChars.Count == 0)
+                throw new CharacterNotFoundException(id);
+
+            return allChars;
         }
+
 
         public async Task<Franchise> GetFranchiseById(int id)
         {
