@@ -24,14 +24,21 @@ namespace MovieCharactersAPI.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Franchises
+        /// <summary>
+        /// Get all franchise resources
+        /// </summary>
+        /// <returns>List of franchises</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FranchiseDto>>> GetFranchises()
         {
             return Ok(_mapper.Map<IEnumerable<FranchiseDto>>(await FranchiseService.GetAllFranchises()));
         }
 
-        // GET: api/Franchises/5
+        /// <summary>
+        /// Get a specific franchise based on a unique identifier 
+        /// </summary>
+        /// <param name="id">A unique identifier for a franchise resource</param>
+        /// <returns>A franchise resource</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<FranchiseDto>> GetFranchise(int id)
         {
@@ -45,7 +52,11 @@ namespace MovieCharactersAPI.Controllers
             }
         }
 
-        // Get All Movies in Franchise
+        /// <summary>
+        /// Get all movies in the franchise
+        /// </summary>
+        /// <param name="id">A unique identifier for a franchise resource</param>
+        /// <returns>List of movies related to franchise</returns>
         [HttpGet("{id}/Movies")]
         public async Task<ActionResult<ICollection<Movie>>> GetAllMoviesOfFranchise(int id)
         {
@@ -58,7 +69,12 @@ namespace MovieCharactersAPI.Controllers
                 return NotFound(new ProblemDetails { Detail = ex.Message });
             }
         }
-        // Get All Movies in Franchise
+
+        /// <summary>
+        /// Get all characters related to franchise
+        /// </summary>
+        /// <param name="id">A unique identifier for a franchise resource</param>
+        /// <returns>List of characters related franchise</returns>
         [HttpGet("{id}/Characters")]
         public async Task<ActionResult<ICollection<Character>>> GetAllCharactersInAFranchise(int id)
         {
@@ -72,8 +88,12 @@ namespace MovieCharactersAPI.Controllers
             }
         }
 
-        // PUT: api/Franchises/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Updates a specific franchise based on a unique identifier 
+        /// </summary>
+        /// <param name="id">A unique identifier for a franchise resource</param>
+        /// <param name="franchise">franchise entity</param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFranchise(int id, Franchise franchise)
         {
@@ -91,8 +111,12 @@ namespace MovieCharactersAPI.Controllers
             }
         }
 
-        // PUT: api/Franchises/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Creates movies to franchise
+        /// </summary>
+        /// <param name="id">A unique identifier for a franchise resource</param>
+        /// <param name="moviesToAdd">List of movies to add</param>
+        /// <returns></returns>
         [HttpPut("{id}/movies")]
         public async Task<IActionResult> AddMoviesToFranchise(int id, List<int> moviesToAdd)
         {
@@ -106,15 +130,22 @@ namespace MovieCharactersAPI.Controllers
             }
         }
 
-        // POST: api/Franchises
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Creates a new franchise resource to database
+        /// </summary>
+        /// <param name="franchise">franchise entity</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Franchise>> PostFranchise(Franchise franchise)
         {
             return CreatedAtAction("GetFranchise", new { id = franchise.Id }, _mapper.Map<FranchiseDto>(await FranchiseService.AddFranchise(franchise)));
         }
 
-        // DELETE: api/Franchises/5
+        /// <summary>
+        /// Deletes a franchise resource with unique identifier from database
+        /// </summary>
+        /// <param name="id">A unique identifier for a franchise resource</param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFranchise(int id)
         {

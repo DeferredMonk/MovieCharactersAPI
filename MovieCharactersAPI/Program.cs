@@ -17,10 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -28,10 +25,10 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v1",
         Title = "MovieCharactersApi",
-        Description = "MOVIECHARACTERSAPI",
+        Description = "Movie Character Api: Use commands Get, put, post, delete resources to manipulate database",
         Contact = new OpenApiContact
         {
-            Name = "MaKi",
+            Name = "Link to repository",
             Url = new Uri("https://github.com/wikris")
         }
     });

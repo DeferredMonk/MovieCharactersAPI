@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieCharactersAPI.Exceptions;
 using MovieCharactersAPI.Models;
 using MovieCharactersAPI.Models.Dtos;
+using MovieCharactersAPI.Models.DTOs;
 using MovieCharactersAPI.Services;
 using System.Net.Mime;
 
@@ -24,13 +25,21 @@ namespace MovieCharactersAPI.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Movies
+        /// <summary>
+        /// Get all movie resources
+        /// </summary>
+        /// <returns>List of movies</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies()
         {
             return Ok(_mapper.Map<IEnumerable<MovieDto>>(await _movieService.GetAllMovies()));
         }
-        // Get All Characters in Movie
+
+        /// <summary>
+        /// Get all characters in the movie
+        /// </summary>
+        /// <param name="id">A unique identifier for a movie resource</param>
+        /// <returns>List of characters in the movie</returns>
         [HttpGet("{id}/characters")]
         public async Task<ActionResult<ICollection<Character>>> GetAllCharactersInAMovie(int id)
         {
@@ -44,7 +53,11 @@ namespace MovieCharactersAPI.Controllers
             }
         }
 
-        // GET: api/Movies/5
+        /// <summary>
+        /// Get a specific movie based on a unique identifier 
+        /// </summary>
+        /// <param name="id">A unique identifier for a movie resource</param>
+        /// <returns>A movie resource</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieDto>> GetMovie(int id)
         {
@@ -58,8 +71,12 @@ namespace MovieCharactersAPI.Controllers
             }
         }
 
-        // PUT: api/Movies/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Updates a specific movie based on a unique identifier 
+        /// </summary>
+        /// <param name="id">A unique identifier for a movie resource</param>
+        /// <param name="movie">Movie entity</param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMovie(int id, Movie movie)
         {
@@ -78,31 +95,15 @@ namespace MovieCharactersAPI.Controllers
             }
         }
 
-        // PUT: api/Movies/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Creates characters to movie
+        /// </summary>
+        /// <param name="id">A unique identifier for a movie resource</param>
+        /// <param name="characters">List of characters</param>
+        /// <returns></returns>
         [HttpPut("{id}/characters")]
         public async Task<IActionResult> AddCharactersToMovie(int id, List<int> characters)
         {
-            //try
-            //{
-            //    await _movieService.AddCharactersToMovie(id, characters);
-            //}
-            //catch (MovieNotFoundException ex)
-            //{
-            //    return NotFound(new ProblemDetails
-            //    {
-            //        Detail = ex.Message,
-            //    });
-            //}
-            //catch (CharacterNotFoundException ex)
-            //{
-            //    return NotFound(new ProblemDetails
-            //    {
-            //        Detail = ex.Message,
-            //    });
-            //}
-
-            //return Ok();
             try
             {
                 return Ok(_mapper.Map<MovieDto>(await _movieService.AddCharactersToMovie(id, characters)));
@@ -113,15 +114,22 @@ namespace MovieCharactersAPI.Controllers
             }
         }
 
-        // POST: api/Movies
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Creates a new movie resource to database
+        /// </summary>
+        /// <param name="movie">Movie entity</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
         {
             return CreatedAtAction("GetMovie", new { id = movie.Id }, _mapper.Map<MovieDto>(await _movieService.AddMovie(movie)));
         }
 
-        // DELETE: api/Movies/5
+        /// <summary>
+        /// Deletes a movie resource with unique identifier from database
+        /// </summary>
+        /// <param name="id">A unique identifier for a movie resource</param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie(int id)
         {
