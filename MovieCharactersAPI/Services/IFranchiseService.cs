@@ -12,5 +12,6 @@ namespace MovieCharactersAPI.Services
         Task<Franchise> UpdateFranchise(Franchise Franchise);
         Task<Franchise> AddMoviesToFranchise(int id, List<int> moviesToAdd); 
         Task<ICollection<Movie>> GetAllMoviesOfFranchises(int id);
+        Task<ICollection<Character>> GetAllCharactersInAFranchises(int id);
     }
 }

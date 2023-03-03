@@ -1,4 +1,13 @@
+
 ﻿using AutoMapper;
+
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mime;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
 using MovieCharactersAPI.Exceptions;
 using MovieCharactersAPI.Models;
@@ -8,6 +17,9 @@ using MovieCharactersAPI.Services;
 namespace MovieCharactersAPI.Controllers
 {
     [Route("api/[controller]")]
+    [ApiConventionType(typeof(DefaultApiConventions))]
+    [Produces(MediaTypeNames.Application.Json)]
+    [Consumes(MediaTypeNames.Application.Json)]
     [ApiController]
     public class CharactersController : ControllerBase
     {
